@@ -52,7 +52,6 @@ def main(txid):
         script = None
 
     # Retrieve OP_RETURN data elements
-    # TODO:
     elements = []
     if script:
         pos = 1

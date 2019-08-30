@@ -14,6 +14,9 @@ from bitcoinrpc.authproxy import AuthServiceProxy
 # D:// protocol:
 #   https://github.com/bitcoineler/D
 #   329eacb2d1ab8770ac01d2daa13a852d72282379ea26caca1729817315fb12b0
+# HAIP protocol:
+#   https://github.com/torusJKL/BitcoinBIPs/blob/master/HAIP.md
+#   d500c4be90f6b66d37544553b86b75d9681e3529c648982c84e3e092e37c5be3
 # Magic Attribute protocol:
 #   https://github.com/rohenaz/MAP
 #   a610a733223f2ab9e0a67b22b519ce4adbd439e1ceb26a5d41873dd64fa5b1b7
@@ -132,6 +135,29 @@ def main(txid):
             print("Type:", elements[i+3].decode('utf-8'))
             print("Sequence:", elements[i+4].decode('utf-8'))
             i = i + 5
+        elif prefix == "1HA1P2exomAwCUycZHr8WeyFoy5vuQASE3":
+            print("Protocol: Hash Author Identity")
+            print("Prefix:", prefix)
+            print("Hashing Algorithm:", elements[i+1].decode('utf-8'))
+            print("Signing Algorithm:", elements[i+2].decode('utf-8'))
+            print("Signing Address:", elements[i+3].decode('utf-8'))
+            print("Signature:", elements[i+4].hex())
+            unit_size = int.from_bytes(elements[i+5], "little", signed=False)
+            print("Index Unit Size:", unit_size)
+            i = i + 6
+            # Optional field indexes
+            while i < len(elements):
+                data = elements[i]
+                if data == b'|':
+                    break
+                print("Field Index Array: 0x{}".format(data.hex()))
+                # Print out individual indexes stored in the array
+                j = 0
+                while j < len(data):
+                    n = int.from_bytes(data[j:j+unit_size], byteorder='little', signed=False)
+                    print("  Index: {}".format(n))
+                    j = j + unit_size
+                i = i + 1
         elif prefix == '|':
             print("| (pipe)")
             i = i + 1

@@ -30,7 +30,8 @@ The purpose of `peek.py` is to help developers decode Bitcom style OP_RETURN pro
 Currently supported protocols include:
 - B://
 - D://
-- Author identity
+- Author Identity
+- Hash Author Identity
 - MAP
 
 The pipeline operator '|' is also supported so protocols made up of subprotocols can be decoded, such as the TonicPOW protocol: `B | MAP`.
